@@ -12,6 +12,9 @@ router.get ('/fetchallblogs', fetchUser ,async (req, res) => {
         const blogs = await Blogs.find({
             user : req.user.id
         }).populate('category', 'content');
+
+        
+
         res.json(blogs)
     } catch (err ){
         console.log(err.message)
@@ -25,7 +28,7 @@ router.post('/addblog', fetchUser, fetchCategory, [
     body('description', 'Description must be 5 character long').isLength({min : 5})
 ], async (req, res) => {
     try {
-        const { title, description, category} = req.body
+        const { title, description} = req.body
         const errors = validationResult(req)
         if (!errors.isEmpty()){
             return res.status(400).json({errors : errors.array()});
