@@ -12,9 +12,6 @@ router.get ('/fetchallblogs', fetchUser ,async (req, res) => {
         const blogs = await Blogs.find({
             user : req.user.id
         }).populate('category', 'content');
-
-        
-
         res.json(blogs)
     } catch (err ){
         console.log(err.message)
@@ -98,6 +95,20 @@ router.delete('/deleteblog', fetchUser, async(req, res) => {
         blog = await Blogs.findByIdAndDelete(req.params.id)
         res.json({"Success" : "Blog has been deleted successfully"})
     } catch (err){
+        console.log(err.message)
+        res.status(500).send('Internal Server Fail')
+    }
+})
+
+//Route 5 : Fetch one blog by id 
+router.get('/blog:id', fetchUser, async(req, res) => {
+    try {
+        const blog = await Blogs.findById(req.params.id)
+        if(!blog){
+            return res.status(404).send("Blog not found")
+        }
+        res.json(blog)
+    } catch (err) {
         console.log(err.message)
         res.status(500).send('Internal Server Fail')
     }
