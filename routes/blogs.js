@@ -6,7 +6,7 @@ const {body , validationResult } = require('express-validator')
 const fetchCategory = require('../middleware/fetchCategory')
 
 //Route 1: Get all the Blogs using: GET "/api/fetchallblogs" Loging Required
-router.get ('/fetchallblogs', fetchUser ,async (req, res) => {
+router.get ('/', fetchUser ,async (req, res) => {
     try {
 
         const blogs = await Blogs.find({
@@ -20,7 +20,7 @@ router.get ('/fetchallblogs', fetchUser ,async (req, res) => {
 })
 
 //Route 2 : Add a new blog post
-router.post('/addblog', fetchUser, fetchCategory, [
+router.post('/', fetchUser, fetchCategory, [
     body('title', 'Enter a valid title').isLength({min : 3}),
     body('description', 'Description must be 5 character long').isLength({min : 5})
 ], async (req, res) => {
@@ -48,7 +48,7 @@ router.post('/addblog', fetchUser, fetchCategory, [
 })
 
 //Route 3 : update an existing Blog 
-router.put('/updateblog', fetchUser, async (req, res) => {
+router.put('/:id', fetchUser, async (req, res) => {
     const { title, description, category, tags} = req.body 
     try {
         const newBlog = {}
@@ -83,7 +83,7 @@ router.put('/updateblog', fetchUser, async (req, res) => {
 })
 
 //Router 4 : Delete an existing blog 
-router.delete('/deleteblog', fetchUser, async(req, res) => {
+router.delete('/:id', fetchUser, async(req, res) => {
     try { 
         let blog = await Blogs.findById(req.params.id)
         if (!blog){
@@ -101,7 +101,7 @@ router.delete('/deleteblog', fetchUser, async(req, res) => {
 })
 
 //Route 5 : Fetch one blog by id 
-router.get('/blog:id', fetchUser, async(req, res) => {
+router.get('/:id', fetchUser, async(req, res) => {
     try {
         const blog = await Blogs.findById(req.params.id)
         if(!blog){

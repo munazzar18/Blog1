@@ -38,7 +38,7 @@ router.post('/', fetchUser, async(req, res) => {
 })
 
 //Route 3 : Update a exisiting comment 
-router.put('/', fetchUser, async(req, res) => {
+router.put('/:id', fetchUser, async(req, res) => {
     try {
         const { content } = req.body
         
@@ -57,10 +57,6 @@ router.put('/', fetchUser, async(req, res) => {
             return res.status(401).send('Not Allowed')
         }
 
-        if(!Blogs.blogId.toString() !== Blogs.blogId){
-            return res.status(401).send("Not allowed in this blog")
-        }
-
         comment = await Comments.findByIdAndUpdate(req.params.id, {$set : newComment}, {new : true} )
         res.json({comment})
 
@@ -71,7 +67,7 @@ router.put('/', fetchUser, async(req, res) => {
 })
 
 //Route 4: Delete an exsisting comment
-router.delete('/', fetchUser, async(req, res) => {
+router.delete('/:id', fetchUser, async(req, res) => {
     try {
         let comment = await Comments.findById(req.params.id)
         if(!comment){
@@ -80,9 +76,6 @@ router.delete('/', fetchUser, async(req, res) => {
         if(comment.user.toString() !== req.user.id){
             return res.status(401).send("Not Permitted")
         } 
-        if(!Blogs.blogId.toString() !== Blogs.blogId){
-            return res.status(401).send("Not allowed in this blog")
-        }
         comment = await Comments.findByIdAndDelete(req.params.id)
         res.json({"Success" : "Comment has been deleted successfully"})
     } catch (error) {
